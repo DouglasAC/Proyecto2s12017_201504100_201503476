@@ -19,6 +19,9 @@ from Drive_Calendar import views as dv_v # IMPORTANDO EL CONTROLADOR DE VISTAS P
 from Drive_Calendar import views_C as cv_v # IMPORTANDO EL CONTROLADOR DE VISTAS PARA CALENDAR
 
 urlpatterns = [
+    #--------RUTA DE CONFIRMACIÓN EN JAVA Y PETICION DE CADENAS DOT------------------
+    url(r'^Conectar/', dv_v.Conectar),
+    url(r'^ReporteUsuariosDrive', dv_v.reporte_usuarios),
     #--------RUTAS PARA DIRECCIONAMIENTO DE PAGINAS DRIVE---
     url(r'^$', dv_v.index, name='index'),
     url(r'^Drive/LogIn', dv_v.LogInView, name='Drive-logIn'),
@@ -33,5 +36,4 @@ urlpatterns = [
     url(r'^Calendar/Registro', cv_v.reg_view, name='Calendar-registro' ),
     #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR
     url(r'^Calendar/Registrar', cv_v.registro_usuarios, name='calendar-reg'),
-    
 ]

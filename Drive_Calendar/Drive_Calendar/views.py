@@ -1,8 +1,17 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from Drive_Calendar.Drive_EDD import Lista
 
 # ESTRUCTURAS DRIVE
 lista_usuario = Lista.ListaDoble()
+
+#CONEXION CON JAVA Y REPORTES DE DRIVE
+def Conectar(request):
+    return HttpResponse("Conexion Correcta con Java y Django")
+
+def reporte_usuarios(request):
+    cadena = lista_usuario.cadena_Dot()
+    return HttpResponse(cadena)
 
 # FUNCIONES PARA MANEJAR EL REDIRECCIONAMIENTO ENTRE PAGINAS DRIVE
 def index(request):
