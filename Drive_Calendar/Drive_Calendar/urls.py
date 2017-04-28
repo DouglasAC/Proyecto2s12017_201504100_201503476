@@ -19,9 +19,13 @@ from Drive_Calendar import views as dv_v # IMPORTANDO EL CONTROLADOR DE VISTAS P
 from Drive_Calendar import views_C as cv_v # IMPORTANDO EL CONTROLADOR DE VISTAS PARA CALENDAR
 
 urlpatterns = [
-    #--------RUTA DE CONFIRMACIÓN EN JAVA Y PETICION DE CADENAS DOT------------------
+    #--------RUTA DE CONFIRMACIÓN EN JAVA Y PETICION DE CADENAS DOT DE DRIVE------------------
     url(r'^Conectar/', dv_v.Conectar),
     url(r'^ReporteUsuariosDrive', dv_v.reporte_usuarios),
+    url(r'^Historial_Drive', dv_v.reporte_bitacora),
+    #--------PETICION DE CADENAS DOT DE CALENDAR---------------------------------
+    url(r'^ReporteUsuariosCalendar', cv_v.reporte_usuarios),
+    url(r'^Historial_Calendar', cv_v.reporte_bitacora),
     #--------RUTAS PARA DIRECCIONAMIENTO DE PAGINAS DRIVE---
     url(r'^$', dv_v.index, name='index'),
     url(r'^Drive/LogIn', dv_v.LogInView, name='Drive-logIn'),
@@ -30,10 +34,18 @@ urlpatterns = [
     #------RUTAS PARA METODOS DE ESTRUCTURAS DRIVE----------
     url(r'^Drive/Registrar', dv_v.registro_usuarios_web, name='drive-reg'),
     url(r'^Drive/Ingresar', dv_v.log_in_usuarios_web, name='drive-ing'),
+    url(r'^Drive/Bitacora', dv_v.guardar_cambios, name='bitacora-drive'),#ESTA PUEDO ELIMINARLA
+    #------RUTAS PARA METODOS DE ESTRUCTURA DRIVE DESDE ANDROID---------
+    url(r'^Drive/Android/Registrar', dv_v.registro_usuarios_android),
+    url(r'^Drive/Android/LogIn', dv_v.log_in_usuarios_Android),
     #/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/--/-/-/-/-/-/-/-/
     #------RUTAS PARA DIRECCIONAMIENTO EN CALENDAR
     url(r'^Calendar/LogIn', cv_v.log_In_view, name='Calendar-logIn'),
     url(r'^Calendar/Registro', cv_v.reg_view, name='Calendar-registro' ),
     #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR
     url(r'^Calendar/Registrar', cv_v.registro_usuarios, name='calendar-reg'),
+    url(r'^Calendar/Ingresar', cv_v.log_in_usuarios, name='calendar-ing'),
+    #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR DESDE ANDROID
+    url(r'^Calendar/Android/Registrar', cv_v.registro_usuarios_android),
+    url(r'^Calendar/Android/LogIn', cv_v.log_in_usuarios_Android),
 ]

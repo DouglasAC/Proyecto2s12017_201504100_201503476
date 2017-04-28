@@ -11,11 +11,14 @@ package reportes_edd;
  */
 import WebService.WebService;
 import GUI.Principal;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.RequestBody;
 import javax.swing.*;
 public class Reportes_EDD {
     /**
      * @param args the command line arguments
      */
+    static WebService servicio = new WebService();
     public static void main(String[] args) {
         // TODO code application logic here
         WebService ser = new WebService();
@@ -27,7 +30,12 @@ public class Reportes_EDD {
         else{
             JOptionPane.showConfirmDialog(null, "Conexión Fallida...");
         }
-        
+        /*RequestBody formBody = new FormEncodingBuilder()
+                .add("nombre", "android")
+                .add("contraseña","1234")
+                .build();
+        String re = servicio.realizarOperacion("Drive/Android/Registrar", formBody).toString();
+        System.out.println(re);*/
     }
     
 }

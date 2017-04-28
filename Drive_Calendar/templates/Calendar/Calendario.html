@@ -1,0 +1,13 @@
+{% extends "Calendar_Template.html" %}
+
+{% block UserName %}
+{{ request.session.usuario }}
+{% endblock %}
+
+{% block titulo %}
+My Calendar
+{% endblock %}
+
+{% block contenido %}
+HOLA MUNDO Calendar
+{% endblock %}

@@ -43,6 +43,16 @@
                     <p>
                          <a href="{% url "Drive-logIn" %}" class="btn btn-lg btn-primary btn-block" >Ir a Log In</a>                        
                     </p>
+                    {% if confirmacion == True %}
+                    <script>
+                        alert('¡Usuario Registrado Correctamente en Drive!');
+                    </script>
+                    {% endif %}
+                    {% if confirmacion == False %}
+                    <script>
+                        alert('Ocurrió un error verifíca que todo este en orden...');
+                    </script>
+                    {% endif %}
                     <label class="checkbox pull-left">
                     </label>
                     </form>

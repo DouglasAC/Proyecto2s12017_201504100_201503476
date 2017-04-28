@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt #Utilizo este import para hacer que ciertas urls no tengan protección por csrf
 from Drive_Calendar.Drive_EDD import Lista
+from Drive_Calendar.Drive_EDD import Bitacora
 
 # ESTRUCTURAS DRIVE
 lista_usuario = Lista.ListaDoble()
+bitacora_cambios = Bitacora.Bitacora()
 
 #CONEXION CON JAVA Y REPORTES DE DRIVE
 def Conectar(request):
@@ -12,6 +15,10 @@ def Conectar(request):
 def reporte_usuarios(request):
     cadena = lista_usuario.cadena_Dot()
     return HttpResponse(cadena)
+
+def reporte_bitacora(request):
+    cadena = bitacora_cambios.listar_bitadora()
+    return HttpResponse("| Historial de Drive |\n"+cadena)
 
 # FUNCIONES PARA MANEJAR EL REDIRECCIONAMIENTO ENTRE PAGINAS DRIVE
 def index(request):
@@ -32,16 +39,20 @@ def registro_usuarios_web(request):
     if request.method == "POST":
         nombre = request.POST['email']
         password = request.POST['password']
+        confirmacion = False
         try:
             lista_usuario.agrega_Lista(nombre, password)
             cadena = lista_usuario.cadena_Dot()
+            confirmacion = True
             print("-----------Registrando en DRIVE------------")
             print("Usuario: "+nombre)
             print("Password: "+password)
             print("-----------Fin Registro DRIVE------------")
+            log_de_cambios_drive("| Registro de Usuario en Drive (Web): "+nombre+" |")
         except Exception as inst:
+            confirmacion = False
             print("Error en el registro en Drive en Views.Py")        
-    return render(request, 'pr.html',{'var': cadena})
+    return render(request, 'Registro.html',{'confirmacion': confirmacion})
 
 def log_in_usuarios_web(request):
     if request.method == 'POST':
@@ -52,12 +63,79 @@ def log_in_usuarios_web(request):
             resp = lista_usuario.log_in_check(nombre, password)
             if resp == "True":
                 salida = "Acceso Concedido a: "+nombre
+                request.session['usuario'] = nombre
                 print("--------------LOG IN CHECK-------------TRUE")
+                log_de_cambios_drive("| Inicio de Sesión Drive (Web): "+nombre+" |\n")
+                return render(request, 'Drive/Menu.html')
             else:
                 salida = "Datos Incorrectos"
+                invalido = True
                 print("------------LOG IN CHECK --------FALSE")
+                log_de_cambios_drive("| Inicio de Sessión Fallido Drive (Web): "+nombre+" |\n")
+                return render(request, 'LogIn.html', {'invalido':invalido})
         except Exception as inst:
-            print("Error en el log in en Dirve en Views.py")
-    return render(request, 'pr.html',{'var':salida})
+            print("Error en el log in en Dirve en Views.py"+str(inst))
+    #return render(request, 'pr.html',{'var':salida})
+def guardar_cambios(request):
+    if request.method == 'GET':
+        cambio = request.POST['cambio']
+        try:
+            bitacora_cambios.inserta_lista(cambio)
+            print("|-------------Bitacora Actual---------------|")
+            salida = "|-------------Bitacora Actual---------------|\n"
+            salida = salida + bitacora_cambios.listar_bitadora()+"\n"
+            salida = salida + "|-------------Fin---------------|"
+            print(salida)
+            print("|-------------Fin Bitacora---------------|")
+            return HttpResponse(salida)
+        except Exception as err:
+            print("Error Al registrar el cambio")
+    else:
+        return HttpResponse("Esta es solo una ruta GET")
+
+def log_de_cambios_drive(cambio):
+    try:
+        bitacora_cambios.inserta_lista(cambio)
+        print("----------------------DRIVE-CAMBIO-ALMACENADO-----------")
+    except Exception as err:
+        print("Error en Views.py en log_cambios_drive "+str(err))
 
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESTRUCTURAS DESDE ANDROID DRIVE
+
+@csrf_exempt
+def registro_usuarios_android(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        password = request.POST['contraseña']
+        try:
+            lista_usuario.agrega_Lista(nombre, password)
+            print("-----------Registrando en DRIVE DESDE ANDROID------------")
+            print("Usuario: "+nombre)
+            print("Password: "+password)
+            print("-----------Fin Registro DRIVE DESDE ANDROID------------")
+            log_de_cambios_drive("| Registro de Usuario en Drive (Android): "+nombre+" |\n")
+            return HttpResponse("registrado")
+        except Exception as inst:
+            print("Error en el registro de Usuarios desde Android para Drive, views.py "+str(inst))
+            return HttpResponse("no registrado")
+    else:
+        return HttpResponse("no registrado")
+
+@csrf_exempt
+def log_in_usuarios_Android(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        password = request.POST['contraseña']
+        try:
+            resp = lista_usuario.log_in_check(nombre, password)
+            if resp == "True":
+                print("--------------LOG IN CHECK ANDROID-------------TRUE")
+                log_de_cambios_drive("| Inicio de Sesión Drive (Android): "+nombre+" |\n")
+                return HttpResponse("valido")
+            else:
+                print("--------------LOG IN CHECK ANDROID------------FALSE")
+                log_de_cambios_drive("| Inicio de Sessión Fallido Drive (Android): "+nombre+" |\n")
+                return HttpResponse("invalido")
+        except Exception as inst:
+            print("Error en el log in de Android para Drive, en Views.py"+str(inst))
+            return HttpResponse("invalido")

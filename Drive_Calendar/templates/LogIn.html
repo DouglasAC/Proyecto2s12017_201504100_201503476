@@ -44,6 +44,11 @@
                     <label class="checkbox pull-left">
                     </label>
                     </form>
+                    {% if invalido == True %}
+                    <script>
+                        alert('Datos incorrectos');
+                    </script>
+                    {% endif %}
                 </div>
                 <a href="{% url "Drive-registro" %}" class="text-center new-account">Crear Cuenta </a>
             </div>

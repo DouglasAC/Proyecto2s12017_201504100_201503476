@@ -35,7 +35,7 @@
                 <div class="account-wall">
                     <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
                         alt="">
-                    <form action="#" method="post" class="form-signin">
+                    <form action="{% url "calendar-ing" %}" method="post" class="form-signin">
                     {% csrf_token %}
                     <input type="text" class="form-control" placeholder="Email" name="email" required autofocus>
                     <input type="password" class="form-control" placeholder="Password" name="password" required>
@@ -44,6 +44,11 @@
                     <label class="checkbox pull-left">
                     </label>
                     </form>
+                    {% if invalido == True %}
+                    <script>
+                        alert('Datos incorrectos');
+                    </script>
+                    {% endif %}
                 </div>
                 <a href="{% url "Calendar-registro" %}" class="text-center new-account">Crear Cuenta </a>
             </div>
