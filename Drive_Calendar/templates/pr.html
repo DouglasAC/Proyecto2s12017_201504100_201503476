@@ -1,1 +1,5 @@
-<p>{{var}}</p>
+<form action="{% url "filep" %}" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="file" name="pr"/>
+    <input type="submit" value="Upload"/>
+</form>

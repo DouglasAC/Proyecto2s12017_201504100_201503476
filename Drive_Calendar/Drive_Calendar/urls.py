@@ -48,4 +48,7 @@ urlpatterns = [
     #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR DESDE ANDROID
     url(r'^Calendar/Android/Registrar', cv_v.registro_usuarios_android),
     url(r'^Calendar/Android/LogIn', cv_v.log_in_usuarios_Android),
+    #PRUEBAS
+    url(r'^file', dv_v.file_upload, name='filep'),
+    url(r'^form_file', dv_v.file_view),
 ]

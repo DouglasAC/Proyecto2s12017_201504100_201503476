@@ -3,6 +3,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt #Utilizo este import para hacer que ciertas urls no tengan protección por csrf
 from Drive_Calendar.Drive_EDD import Lista
 from Drive_Calendar.Drive_EDD import Bitacora
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 # ESTRUCTURAS DRIVE
 lista_usuario = Lista.ListaDoble()
@@ -139,3 +141,17 @@ def log_in_usuarios_Android(request):
         except Exception as inst:
             print("Error en el log in de Android para Drive, en Views.py"+str(inst))
             return HttpResponse("invalido")
+
+#ESTOS METODOS SON DE PRUEBA PARA ARCHIVOS
+def file_upload(request):
+    if request.method == 'POST':
+        filename = request.FILES['pr']
+        arc = request.POST['pr']
+        fs = FileSystemStorage()
+        filena = fs.save(filename.name, filename)
+        uploaded_file_url = fs.url(filena)
+        print(arc)
+    return HttpResponse("file: "+settings.BASE_DIR+"\\media\\"+str(filename))
+
+def file_view(request):
+    return render(request,'pr.html')
