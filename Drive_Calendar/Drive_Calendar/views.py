@@ -42,18 +42,19 @@ def registro_usuarios_web(request):
         nombre = request.POST['email']
         password = request.POST['password']
         confirmacion = False
-        try:
-            lista_usuario.agrega_Lista(nombre, password)
-            cadena = lista_usuario.cadena_Dot()
-            confirmacion = True
-            print("-----------Registrando en DRIVE------------")
-            print("Usuario: "+nombre)
-            print("Password: "+password)
-            print("-----------Fin Registro DRIVE------------")
-            log_de_cambios_drive("| Registro de Usuario en Drive (Web): "+nombre+" |")
-        except Exception as inst:
-            confirmacion = False
-            print("Error en el registro en Drive en Views.Py")        
+        if lista_usuario.existe_usuario(nombre) == "False":  
+            try:
+                lista_usuario.agrega_Lista(nombre, password)
+                cadena = lista_usuario.cadena_Dot()
+                confirmacion = True
+                print("-----------Registrando en DRIVE------------")
+                print("Usuario: "+nombre)
+                print("Password: "+password)
+                print("-----------Fin Registro DRIVE------------")
+                log_de_cambios_drive("| Registro de Usuario en Drive (Web): "+nombre+" |")
+            except Exception as inst:
+                confirmacion = False
+                print("Error en el registro en Drive en Views.Py")        
     return render(request, 'Registro.html',{'confirmacion': confirmacion})
 
 def log_in_usuarios_web(request):

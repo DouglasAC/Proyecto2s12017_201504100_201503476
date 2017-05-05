@@ -1,9 +1,11 @@
 # LISTA DE USUARIOS DE DRIVE
+from Drive_Calendar.Drive_EDD import Carpetas
 class Usuario:
     
     def __init__(self, nombre, password):
         self.nombre = nombre
         self.password = password
+        self.dir = Carpetas.ArbolB()
 
     def __str__(self):
         pass
@@ -93,3 +95,35 @@ class ListaDoble:
             except Exception as inst:
                 print("Ocurrio un error al buscar... en Drive log_in_check")
         return bandera
+    
+    def existe_usuario(self, nombre):
+        aux = self.raiz
+        bandera = "False"
+        while aux is not None:
+            try:
+                if aux.usuario.nombre == nombre:
+                    bandera = "True"
+                    break
+                if aux.siguiente is not None:
+                    aux = aux.siguiente
+                else:
+                    break
+            except Exception as err:
+                print("Error en el checkeo de Usuario: existe_usuario "+ str(err))
+        return bandera
+    
+    def accdeder_directorio(self, nombre):
+        aux = self.raiz
+        directorio_aux = Carpetas.ArbolB()
+        while aux is not None:
+            try:
+                if aux.usuario.nombre == nombre:
+                    directorio_aux = aux.usuario.dir
+                    break
+                if aux.siguiente is not None:
+                    aux = aux.siguiente
+                else:
+                    break
+            except Exception as err:
+                print("Error al acceder al directorio")
+        return directorio_aux
