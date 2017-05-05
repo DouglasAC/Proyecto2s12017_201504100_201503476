@@ -34,6 +34,7 @@ class ArbolB:
         self.Band1 = False
         self.cadena = ""
         self.lista_aux = list()
+        self.lista_cad = list()
     
     def is_empty(self, pagina):
         if pagina is None or pagina.cuentas is 0:
@@ -41,7 +42,8 @@ class ArbolB:
         else:
             return False
     
-    def insertar(self, cl):
+    def insertar(self, cla):
+        cl = Nodo_Carpeta(cla)
         self.insertar_p(cl, self.p)
     
     def insertar_p(self, cl, raiz):
@@ -161,3 +163,40 @@ class ArbolB:
     def re_insert(self):
         for c in self.lista_aux:
             self.insertar(c)
+    
+    def listar_carpetas(self):
+        #metodo publico
+        self.lista_aux.clear()
+        self.listar(self.p)
+        return self.lista_aux
+        
+
+    def listar(self, pagina):
+        if(pagina.cuentas > 0) and (pagina.ramas[0] is not None):
+            self.meter_a_lista(pagina)
+            for x in range(1, pagina.cuentas+1):
+                if pagina.ramas[x] is not None:
+                    self.meter_a_lista(pagina.ramas[x])
+                    self.listar(pagina.ramas[x-1])
+    
+    def meter_a_lista(self, pagina):
+        for x in range(0, pagina.cuentas):
+            self.lista_aux.append(pagina.claves[x])
+    
+    def listar_string(self):
+        self.lista_cad.clear()
+        self.listar_cadenas(self.p)
+        return self.lista_cad
+
+    def listar_cadenas(self, pagina):
+        if(pagina.cuentas > 0) and (pagina.ramas[0] is not None):
+            self.meter_cadenas(pagina)
+            for x in range(1, pagina.cuentas+1):
+                if pagina.ramas[x] is not None:
+                    self.meter_cadenas(pagina.ramas[x])
+                    self.listar_cadenas(pagina.ramas[x-1])
+    
+    def meter_cadenas(self, pagina):
+        for x in range(0, pagina.cuentas):
+            self.lista_aux.append(pagina.claves[x].clave)
+        

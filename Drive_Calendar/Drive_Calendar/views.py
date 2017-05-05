@@ -35,6 +35,8 @@ def Registro(request):
 
     return render(request, 'Registro.html')
 
+def add_folder(request):
+    return render(request, 'Drive/AddCarpetas.html')
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESRUCTURAS DESDE WEB DRIVE
 
 def registro_usuarios_web(request):
@@ -102,6 +104,25 @@ def log_de_cambios_drive(cambio):
         print("----------------------DRIVE-CAMBIO-ALMACENADO-----------")
     except Exception as err:
         print("Error en Views.py en log_cambios_drive "+str(err))
+
+def new_folder(request):
+    if request.method == "POST":
+        clave = request.POST['clave']
+        nombre = request.POST['nombre']
+        resp = lista_usuario.usuario_agregar_carpeta(nombre, clave)
+        #print(nombre)
+        #print(clave)
+        #print(resp)
+        if resp == "creado":
+            print("creada con exito")
+            return HttpResponse("Carpeta Creada Con Éxito!")
+        elif resp == "duplicado":
+            return HttpResponse("la carpeta ya existe...")
+        else:
+            return HttpResponse("No se loró crear la carpeta"+ nombre)
+    else:
+        return HttpResponse("invalido")
+
 
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESTRUCTURAS DESDE ANDROID DRIVE
 

@@ -31,9 +31,11 @@ urlpatterns = [
     url(r'^Drive/LogIn', dv_v.LogInView, name='Drive-logIn'),
     url(r'^Drive/Registro', dv_v.Registro, name='Drive-registro'),
     url(r'^admin/', admin.site.urls),
+    url(r'^Drive/Nueva_Carpeta', dv_v.add_folder, name="add_carpetas"),
     #------RUTAS PARA METODOS DE ESTRUCTURAS DRIVE----------
     url(r'^Drive/Registrar', dv_v.registro_usuarios_web, name='drive-reg'),
     url(r'^Drive/Ingresar', dv_v.log_in_usuarios_web, name='drive-ing'),
+    url(r'^Drive/Nueva/Carpeta', dv_v.new_folder, name="add_folder"),
     url(r'^Drive/Bitacora', dv_v.guardar_cambios, name='bitacora-drive'),#ESTA PUEDO ELIMINARLA
     #------RUTAS PARA METODOS DE ESTRUCTURA DRIVE DESDE ANDROID---------
     url(r'^Drive/Android/Registrar', dv_v.registro_usuarios_android),
