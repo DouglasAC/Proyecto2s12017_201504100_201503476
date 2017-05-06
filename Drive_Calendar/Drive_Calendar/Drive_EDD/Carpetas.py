@@ -19,7 +19,7 @@ class Pagina:
     def print_node(self):
         cadena = ""
         for x in range(0, self.cuentas):
-            cadena = cadena + "| "+str(self.claves[x].nombre)+" |"
+            cadena = cadena + "| "+str(self.claves[x].clave)+" |"
         return cadena
 
 class ArbolB:
@@ -47,8 +47,10 @@ class ArbolB:
         self.insertar_p(cl, self.p)
     
     def insertar_p(self, cl, raiz):
+        print("insertar: "+str(cl.clave))
         self.empujar(cl, raiz)
         if(self.Band1==True):
+            print("nueva")
             self.p = Pagina(None)
             self.p.cuentas = 1
             self.p.claves[0] = self.aux
@@ -56,6 +58,7 @@ class ArbolB:
             self.p.ramas[1] = self.auxr
     
     def empujar(self, cl, raiz):
+        print("empujar")
         k = 0
         self.Existe = False
         if self.is_empty(raiz) == True:
@@ -67,7 +70,9 @@ class ArbolB:
             if self.Existe == True:
                 print("Clave Repetida")
                 self.Band1 = False
-                if(self.Band1 == True):
+            else:
+                self.empujar(cl, raiz.ramas[k])
+                if(self.Band1==True):
                     if raiz.cuentas < 4:
                         self.Band1 = False
                         self.meter_pagina(self.aux, raiz, k)
@@ -133,7 +138,7 @@ class ArbolB:
         if(pagina.cuentas > 0) and (pagina.ramas[0] is not None):
             for x in range(0, pagina.cuentas + 1):
                 if pagina.ramas[x] is not None:
-                    if pagina.print_node() is not "":
+                    if pagina.ramas[x].print_node() is not "":
                         self.cadena = self.cadena + '"'+pagina.print_node() +'"'+' -> "'+ pagina.ramas[x].print_node()+'";'+"\n"
                     if pagina.ramas[x].print_node() is "":
                         self.cadena = self.cadena + '"'+pagina.print_node() +'";\n'
@@ -163,6 +168,9 @@ class ArbolB:
     def re_insert(self):
         for c in self.lista_aux:
             self.insertar(c)
+    
+    def print_root(self):
+        print(self.p.print_node())
     
     def listar_carpetas(self):
         #metodo publico

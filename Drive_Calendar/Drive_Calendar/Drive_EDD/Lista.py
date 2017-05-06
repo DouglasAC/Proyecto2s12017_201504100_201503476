@@ -131,10 +131,12 @@ class ListaDoble:
     def usuario_agregar_carpeta(self, nombre, carpeta):
         aux = self.raiz
         resp = ""
+        print(carpeta)
         directorio_aux = Carpetas.ArbolB()
         while aux is not None:
             try:
                 if aux.usuario.nombre == nombre:
+                    print("encontre: "+str(aux.usuario.nombre))
                     directorio_aux = aux.usuario.dir
                     break
                 if aux.siguiente is not None:
@@ -145,14 +147,20 @@ class ListaDoble:
                 print("Error al acceder al directorio")
                 resp = "Error al acceder al dir"
         if aux.usuario.dir is not None:
-            auxlista = aux.usuario.dir.listar_string()
-            print(auxlista)
-            print(carpeta)
-            print(carpeta in auxlista)
-            if carpeta in auxlista == False:
+            
+            #print(cad)
+            #print(auxlista)
+            #print(carpeta)
+            #print(carpeta in auxlista)
+            if (carpeta in auxlista) == False:
                 aux.usuario.dir.insertar(carpeta)
                 resp = "creado"
             else:
                 resp = "duplicado"
-        print(resp)
+        auxlista = aux.usuario.dir.listar_string()
+        cad = aux.usuario.dir.imprimir_arbol()
+        aux.usuario.dir.print_root()
+        print(cad)
+        print(auxlista)
+        #print(resp)
         return resp

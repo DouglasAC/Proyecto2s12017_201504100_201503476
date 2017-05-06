@@ -114,7 +114,7 @@ def new_folder(request):
         #print(clave)
         #print(resp)
         if resp == "creado":
-            print("creada con exito")
+            #print("creada con exito")
             return HttpResponse("Carpeta Creada Con Éxito!")
         elif resp == "duplicado":
             return HttpResponse("la carpeta ya existe...")
