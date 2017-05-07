@@ -47,10 +47,10 @@ class ArbolB:
         self.insertar_p(cl, self.p)
     
     def insertar_p(self, cl, raiz):
-        print("insertar: "+str(cl.clave))
+        #print("insertar: "+str(cl.clave))
         self.empujar(cl, raiz)
         if(self.Band1==True):
-            print("nueva")
+            #print("nueva")
             self.p = Pagina(None)
             self.p.cuentas = 1
             self.p.claves[0] = self.aux
@@ -58,7 +58,7 @@ class ArbolB:
             self.p.ramas[1] = self.auxr
     
     def empujar(self, cl, raiz):
-        print("empujar")
+        #print("empujar")
         k = 0
         self.Existe = False
         if self.is_empty(raiz) == True:
@@ -130,8 +130,10 @@ class ArbolB:
         return x
     
     def imprimir_arbol(self):
-        self.cadena = ""
+        self.cadena = "digraph Directorio{\n"
+        self.cadena = self.cadena + "node [shape=box, color=grey87]\n"
         self.enlazar_ramas(self.p)
+        self.cadena = self.cadena +"}"
         return self.cadena
     
     def enlazar_ramas(self, pagina):
@@ -192,9 +194,9 @@ class ArbolB:
             self.lista_aux.append(pagina.claves[x])
     
     def listar_string(self):
-        self.lista_cad.clear()
+        self.lista_aux.clear()
         self.listar_cadenas(self.p)
-        return self.lista_cad
+        return self.lista_aux
 
     def listar_cadenas(self, pagina):
         if(pagina.cuentas > 0) and (pagina.ramas[0] is not None):
@@ -206,5 +208,6 @@ class ArbolB:
     
     def meter_cadenas(self, pagina):
         for x in range(0, pagina.cuentas):
+            #print(pagina.claves[x].clave)
             self.lista_aux.append(pagina.claves[x].clave)
         

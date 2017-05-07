@@ -136,7 +136,7 @@ class ListaDoble:
         while aux is not None:
             try:
                 if aux.usuario.nombre == nombre:
-                    print("encontre: "+str(aux.usuario.nombre))
+                    #print("encontre: "+str(aux.usuario.nombre))
                     directorio_aux = aux.usuario.dir
                     break
                 if aux.siguiente is not None:
@@ -147,20 +147,59 @@ class ListaDoble:
                 print("Error al acceder al directorio")
                 resp = "Error al acceder al dir"
         if aux.usuario.dir is not None:
-            
+            auxlista = aux.usuario.dir.listar_string()
             #print(cad)
             #print(auxlista)
             #print(carpeta)
             #print(carpeta in auxlista)
             if (carpeta in auxlista) == False:
                 aux.usuario.dir.insertar(carpeta)
-                resp = "creado"
+                resp = "hecho"
             else:
                 resp = "duplicado"
         auxlista = aux.usuario.dir.listar_string()
         cad = aux.usuario.dir.imprimir_arbol()
-        aux.usuario.dir.print_root()
-        print(cad)
+        #aux.usuario.dir.print_root()
+        #print(cad)
         print(auxlista)
         #print(resp)
         return resp
+    
+    def obtener_directorio(self, nombre):
+        aux = self.raiz
+        while aux is not None:
+            try:
+                if aux.usuario.nombre == nombre:
+                    dir = aux.usuario.dir
+                    break
+                if aux.siguiente is not None:
+                    aux = aux.siguiente
+                else:
+                    break
+            except Exception as err:
+                print("err: "+str(err))
+        return dir
+    
+    def verLista(self, dir):
+        lista = dir.listar_carpetas()
+        print(lista)
+    
+    def buscar_arbo(self, dir, listacarpetas):
+        return self.buscar_arbol_correcto(dir, listacarpetas)
+    
+    def buscar_arbol_correcto(self, dir, listacarpetas):
+        listado_obj = dir.listar_carpetas() #obtengo los objetos carpetas
+        buscar = "" #carpeta a buscar
+        nodo_retorna = None
+        if len(listacarpetas) > 0:
+            buscar = listacarpetas.pop(0)
+        for cada_carp in listado_obj:
+            if cada_carp.clave == buscar:
+                nodo_retorna = cada_carp.sub_carp
+                break
+        if len(listacarpetas)>0:
+            print("recurividad")
+            return self.buscar_arbol_correcto(nodo_retorna, listacarpetas)
+        else:
+            print("retorno nodo")
+            return nodo_retorna

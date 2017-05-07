@@ -1,0 +1,69 @@
+{% extends "Dashboard_template.html" %}
+
+{% block UserName %}
+{{ request.session.usuario }}
+{% endblock %}
+
+{% block titulo %}
+My Drive
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">Editar:</div>
+                <div class="panel-body">
+                    <form action="{% url 'Drive-carp' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <input type="hidden" name="user" value="{{ request.session.usuario }}"/>
+                            <input type="text" name="path" class="form-control" placeholder="Path..."/>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" class="btn btn-default">Buscar</button>
+                        </div>
+                        <div class="col-lg-3">
+                            <a href="{% url 'drive-ing' %}" type="button" class="btn btn-default">Menu</a>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">Carpetas en Path</div>
+                <div class="panel-body">
+                     <table class="table table table-bordered table-hover">
+                         <tr>
+                            <th>Icono</th>
+                            <th>Nombre</th>
+                            <th>Path</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                         {% for carpeta in carpetas %}
+                            <tr>
+                                <td><i class="material-icons">folder</i></td>
+                                <td>{{ carpeta }}</td>
+                                <td>{{ path }}</td>
+                                <td> <a href="{% url 'edit-folder' path=carpeta %}" type="button" class="btn btn-warning" >Editar</a> </td>
+                                <td> <a href="" type="button" class="btn btn-danger" >Eliminar</a> </td>
+                            </tr>
+                         {% endfor %}
+                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

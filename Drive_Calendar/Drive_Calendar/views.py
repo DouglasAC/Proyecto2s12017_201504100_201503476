@@ -22,9 +22,27 @@ def reporte_bitacora(request):
     cadena = bitacora_cambios.listar_bitadora()
     return HttpResponse("| Historial de Drive |\n"+cadena)
 
-# FUNCIONES PARA MANEJAR EL REDIRECCIONAMIENTO ENTRE PAGINAS DRIVE
-def index(request):
+@csrf_exempt
+def reporte_directorio(request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        path = request.POST['path']
+        cadena = ""
+        try:
+            carp = path.split("/")
+            dir = lista_usuario.obtener_directorio(nombre)
+            if path == "":
+                cadena = dir.imprimir_arbol()
+            else:
+                arbol = lista_usuario.buscar_arbo(dir, carp)
+                cadena = arbol.imprimir_arbol()
+        except Exception as err:
+            print("Error... "+str(err))
+            cadena = "vacio..."
+        return HttpResponse(cadena)
 
+# FUNCIONES PARA MANEJAR EL REDIRECCIONAMIENTO ENTRE PAGINAS DRIVE
+def index(request):    
     return render(request, 'index.html')
 
 def LogInView(request):
@@ -37,6 +55,35 @@ def Registro(request):
 
 def add_folder(request):
     return render(request, 'Drive/AddCarpetas.html')
+
+def listar_folder_path(request):
+    if request.method == 'POST':
+        nombre = request.POST['user']
+        path = request.POST['path']
+        carpetas = None
+        if path == "":
+            dir = lista_usuario.obtener_directorio(nombre)
+            carpetas = dir.listar_string()
+        else:
+            carp = path.split("/")
+            dir = lista_usuario.obtener_directorio(nombre)
+            arbol = lista_usuario.buscar_arbo(dir, carp)
+            carpetas = arbol.listar_string()
+        return render(request, 'Drive/Editar_C.html', {'carpetas':carpetas, 'path': path})
+    else:
+        if request.session['usuario'] is not None:
+            dir = None
+            dir = lista_usuario.obtener_directorio(request.session['usuario'])
+            carpetas = dir.listar_string()
+            return render(request, 'Drive/Editar_C.html',{'carpetas': carpetas, 'path': '/'})
+
+def editar_folder_path(request, path):
+    if request.method == 'POST':
+        return HttpResponse("POST "+path)
+    else:
+        return HttpResponse("GET "+path)
+
+
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESRUCTURAS DESDE WEB DRIVE
 
 def registro_usuarios_web(request):
@@ -70,8 +117,10 @@ def log_in_usuarios_web(request):
                 salida = "Acceso Concedido a: "+nombre
                 request.session['usuario'] = nombre
                 print("--------------LOG IN CHECK-------------TRUE")
+                dir = lista_usuario.obtener_directorio(nombre)
+                carpetas = dir.listar_string()
                 log_de_cambios_drive("| Inicio de Sesión Drive (Web): "+nombre+" |\n")
-                return render(request, 'Drive/Menu.html')
+                return render(request, 'Drive/Menu.html', {'carpetas': carpetas})
             else:
                 salida = "Datos Incorrectos"
                 invalido = True
@@ -80,6 +129,12 @@ def log_in_usuarios_web(request):
                 return render(request, 'LogIn.html', {'invalido':invalido})
         except Exception as inst:
             print("Error en el log in en Dirve en Views.py"+str(inst))
+    else:
+        if request.session['usuario'] is not None:
+            nombre = request.session['usuario']
+            dir = lista_usuario.obtener_directorio(nombre)
+            carpetas = dir.listar_string()
+            return render(request, 'Drive/Menu.html', {'carpetas': carpetas})
     #return render(request, 'pr.html',{'var':salida})
 def guardar_cambios(request):
     if request.method == 'GET':
@@ -107,13 +162,38 @@ def log_de_cambios_drive(cambio):
 
 def new_folder(request):
     if request.method == "POST":
+        carpetas = ""
         clave = request.POST['clave']
         nombre = request.POST['nombre']
-        resp = lista_usuario.usuario_agregar_carpeta(nombre, clave)
+        path = request.POST['path']
+        resp = ""
+        if path == "":
+            resp = lista_usuario.usuario_agregar_carpeta(nombre, clave)
+            log_de_cambios_drive("| Creación de Carpeta: "+clave+" en Path: /"+path+" Por Usuario: "+nombre+" |")
+        else:
+            carpetas = path.split("/")
+            x = len(carpetas)-1
+            nueva = carpetas[x]
+            #print(carpetas)
+            dir = lista_usuario.obtener_directorio(nombre)
+            arbol_cor = lista_usuario.buscar_arbo(dir, carpetas)
+            try:
+                arbol_cor.insertar(clave)
+                cad = arbol_cor.imprimir_arbol()
+                log_de_cambios_drive("| Creación de Carpeta: "+clave+" en Path: /"+path+" Por Usuario: "+nombre+" |")
+            except Exception as error:
+                print("El arbol es nulo... "+str(error))
+                log_de_cambios_drive("| Error en creación de Carpeta: "+clave+" en Path: /"+path)
+            #print(cad)
+            resp = "hecho"
+        #print(path)
+        #resp = lista_usuario.usuario_agregar_carpeta(nombre, clave)
+        #resp = lista_usuario.carpetas_path(carp, nombre, clave)
+        #print(carp)
         #print(nombre)
         #print(clave)
         #print(resp)
-        if resp == "creado":
+        if resp == "hecho":
             #print("creada con exito")
             return HttpResponse("Carpeta Creada Con Éxito!")
         elif resp == "duplicado":

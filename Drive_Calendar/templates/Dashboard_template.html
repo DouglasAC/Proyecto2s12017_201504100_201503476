@@ -49,7 +49,9 @@
 	    	<div class="sidebar-wrapper">
 	            <ul class="nav">
 					{% url 'drive-ing' as url_v %}
-	                <li class="{% if request.get_full_path == url_v %} active {% endif %}">
+					{% url 'add_carpetas' as fol %}
+					{% url 'Drive-carp' as dc %}
+	                <li class="{% if request.get_full_path == url_v or request.get_full_path == fol or request.get_full_path == dc  %} active {% endif %}">
 	                    <a href="#">
 	                        <i class="material-icons">folder</i>
 	                        <p>My Drive</p>
@@ -100,7 +102,7 @@
 							<span class="icon-bar"></span>
 							<span class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" href="#">Bienvenido {% block UserName %} {% endblock %} </a>
+						<a class="navbar-brand" href="#">Bienvenido: {% block UserName %} {% endblock %} </a>
 					</div>
 					<div class="collapse navbar-collapse">
 						<ul class="nav navbar-nav navbar-right">

@@ -29,11 +29,16 @@ Añadir Carpetas y Archivos
                         <p>
                             <input type="text" placeholder="Nombre de Carpeta" required id="clave" class="form-control"/>
                         </p>
-
                         <p>
-                            <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Crear</button>
+                            <strong>Ruta: (/) = raíz</strong>
                         </p>
-
+                        <p>
+                            <input type="text" placeholder="Ejemplo/ejemplo..." id="path" class="form-control"/>
+                        </p>
+                        <p>
+                            <button type="submit" class="btn btn-success form-control"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Crear</button>
+                            <a href="{% url 'drive-ing' %}" type="button" class="btn btn-default form-control">My Drive</a>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -54,6 +59,7 @@ Añadir Carpetas y Archivos
             data:{
                 clave: $('#clave').val(),
                 nombre: $('#nombre').val(),
+                path: $('#path').val(),
                 csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
             },
             success: function(){

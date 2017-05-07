@@ -10,10 +10,47 @@ My Drive
 
 {% block contenido %}
 <div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Opciones</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <a href="{% url 'add_carpetas' %}" type="button" class="btn btn-success">Agregar Carpeta</a>
+                        </div>
+                        <div class="col-lg-4">
+                            <a href="{% url 'Drive-carp' %}" type="button" class="btn btn-primary">Editar Carpetas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">Archivos y Carpetas</div>
         <div class="panel-body">
-            <a href="{% url "add_carpetas" %}">ir a carpetas</a>
+            
+                <div class="row">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-8">
+                        <table class="table table-bordered table-hover">
+                            <tr>
+                                <th>Icono</th>
+                                <th>Tipo de Elemento</th>
+                                <th>Nombre</th>
+                            </tr>
+                                {% for carpeta in carpetas %}
+                            <tr>
+                                <td><i class="material-icons">folder</i></td>
+                                <td>Carpeta</td>
+                                <td>{{ carpeta }}</td>
+                            </tr>
+                                {% endfor %}
+                        </table>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
