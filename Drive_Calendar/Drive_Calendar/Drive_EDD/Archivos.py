@@ -4,6 +4,7 @@ class Archivo:
         self.nombre = nombre
         self.extension = extension
         self.archivo = archivo #archivo ya en bytes
+        self.size = ""
     
 class Node(object):
         
@@ -128,7 +129,7 @@ class AVLTree(object):
     
     def __listar(self, raiz, cadena):
         if(raiz != None):
-            cadena += "nodo" + str(raiz.key) + "[label=\""+str(raiz.file.nombre)+str(raiz.file.extension)+"\"];\n"
+            cadena += "nodo" + str(raiz.key) + "[label=\""+str(raiz.file.nombre)+"."+str(raiz.file.extension)+"\"];\n"
             if(raiz.left != None and raiz.right != None):
                 cadena = self.__listar(raiz.left.node, cadena)
                 cadena = self.__listar(raiz.right.node, cadena)

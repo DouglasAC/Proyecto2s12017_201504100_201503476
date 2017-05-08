@@ -11,6 +11,12 @@ lista_usuario = Lista.ListaDoble()
 bitacora_cambios = Bitacora.Bitacora()
 
 #CONEXION CON JAVA Y REPORTES DE DRIVE
+@csrf_exempt
+def conAndroid(request):
+    if request.method == 'POST':
+        return HttpResponse("<h1>esta conectado</h1>")
+    else:
+        return HttpResponse("<h1>esta GET</h1>")
 def Conectar(request):
     return HttpResponse("Conexion Correcta con Java y Django")
 
@@ -40,6 +46,27 @@ def reporte_directorio(request):
             print("Error... "+str(err))
             cadena = "vacio..."
         return HttpResponse(cadena)
+@csrf_exempt
+def reporte_avl(request):
+    if request.method == 'POST':
+        usuario = request.POST['usuario']
+        path = request.POST['path']
+        cadena = ""
+        if path == "":
+            try:
+                Avl = lista_usuario.obtener_archivos(usuario)
+                cadena = Avl.graficar()
+            except Exception as error:
+                print("erro: "+str(error))
+        else:
+            try:
+                listadocarpetas = path.split("/")
+                dir = lista_usuario.obtener_directorio(usuario)
+                nodoaux = lista_usuario.buscar_avl(dir, listadocarpetas)
+                cadena = nodoaux.files.graficar()
+            except Exception as err:
+                print("error: "+str(err))
+    return HttpResponse(cadena)
 
 # FUNCIONES PARA MANEJAR EL REDIRECCIONAMIENTO ENTRE PAGINAS DRIVE
 def index(request):    
@@ -82,7 +109,8 @@ def editar_folder_path(request, path):
         return HttpResponse("POST "+path)
     else:
         return HttpResponse("GET "+path)
-
+def vista_upload(request):
+    return render(request, 'Drive/AddFile.html')
 
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESRUCTURAS DESDE WEB DRIVE
 
@@ -203,6 +231,49 @@ def new_folder(request):
     else:
         return HttpResponse("invalido")
 
+def new_file(request):
+    if request.method == 'POST':
+        confirm = False
+        arch = request.FILES['archi']
+        path = request.POST['path']
+        usuario = request.POST['nombre']
+        fs = FileSystemStorage()
+        nombrefile = fs.save(arch.name, arch)
+        upload_dir = fs.url(nombrefile)
+        ruta = settings.BASE_DIR+"\\media\\"+nombrefile
+        archivo = lista_usuario.leer_archivo(ruta)
+        lista = ruta.split("\\")
+        x = len(lista) - 1
+        nombre = lista[x]
+        lista2 = nombre.split(".")
+        extension = lista2[1]
+        name = lista2[0]
+        if path == "":
+            Avl = lista_usuario.obtener_archivos(usuario)
+            try:
+                print("entro aqui porque path es vacio")
+                Avl.agregar(name, extension, archivo)
+                cadena = Avl.graficar()
+                confirm = True
+                print(cadena)
+            except Exception as r:
+                confirm = False
+                print("error... "+str(r))
+        else:
+            print("entro cuando hay una carpeta")
+            listadocarpetas = path.split("/")
+            dir = lista_usuario.obtener_directorio(usuario)
+            nodoaux = lista_usuario.buscar_avl(dir, listadocarpetas)
+            try:
+                nodoaux.files.agregar(nombre, extension, archivo)
+                cadena = nodoaux.files.graficar()
+                confirm = True
+                print(cadena)
+            except Exception as err:
+                confirm = False
+                print("Error "+str(err))
+        return render(request, 'Drive/AddFile.html', {'confirm':confirm})
+        
 
 # FUNCIONES PARA MANEJAR EL INGRESO DE DATOS EN LAS ESTRUCTURAS DESDE ANDROID DRIVE
 
@@ -248,11 +319,12 @@ def log_in_usuarios_Android(request):
 def file_upload(request):
     if request.method == 'POST':
         filename = request.FILES['pr']
-        arc = request.POST['pr']
+        #arc = request.POST['pr']
         fs = FileSystemStorage()
         filena = fs.save(filename.name, filename)
         uploaded_file_url = fs.url(filena)
-        print(arc)
+        #print(arc)
+        #print(uploaded_file_url)
     return HttpResponse("file: "+settings.BASE_DIR+"\\media\\"+str(filename))
 
 def file_view(request):

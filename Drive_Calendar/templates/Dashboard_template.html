@@ -52,26 +52,27 @@
 					{% url 'add_carpetas' as fol %}
 					{% url 'Drive-carp' as dc %}
 	                <li class="{% if request.get_full_path == url_v or request.get_full_path == fol or request.get_full_path == dc  %} active {% endif %}">
-	                    <a href="#">
+	                    <a href="{% url 'drive-ing' %}">
 	                        <i class="material-icons">folder</i>
 	                        <p>My Drive</p>
 	                    </a>
 	                </li>
-	                
+	                <!--
 	                <li>
 	                    <a href="#">
 	                        <i class="material-icons">person</i>
 	                        <p>Perfil de Usuario</p>
 	                    </a>
-	                </li>
-	                <li>
+	                </li>-->
+	                <!--<li>
 	                    <a href="#">
 	                        <i class="material-icons">history</i>
 	                        <p>Historial de Cambios</p>
 	                    </a>
-	                </li>
-	                <li>
-	                    <a href="#">
+	                </li>-->
+					{% url 'vista_upload' as upload %}
+	                <li  class="{% if request.get_full_path == upload %} active {% endif %}">
+	                    <a href="{% url 'vista_upload' %}" >
 	                        <i class="material-icons">backup</i>
 	                        <p>Cargar Archivos</p>
 	                    </a>

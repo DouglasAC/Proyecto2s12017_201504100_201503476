@@ -1,0 +1,60 @@
+{% extends "Dashboard_template.html" %}
+
+{% block UserName %}
+{{ request.session.usuario }}
+{% endblock %}
+
+{% block titulo %}
+Subir Archivos
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-7">
+            <div class="panel panel-default">
+                <div class="panel-heading"> Subir Archivos </div>
+                <div class="panel-body">
+                    <form action="{% url 'add-file' %}" enctype="multipart/form-data" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="nombre" value="{{ request.session.usuario }}">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <strong>Selececcione un archivo:</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="file" name="archi">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <strong><h3>Path /:</h3></strong>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" name="path" class="form-control">
+                            </div>
+                        </div>
+                        <p>
+                            <button type="submit" class="btn btn-success">Subir</button>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% if confirm == True %}
+<script>
+    alert('Se subió Archivo Correctamente')
+</script>
+{% endif %}
+{% if confirm == False %}
+<script>
+    alert('Ocurrió un error al subir')
+</script>
+{% endif %}
+{% endblock %}

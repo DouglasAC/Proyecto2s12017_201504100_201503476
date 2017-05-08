@@ -1,11 +1,14 @@
 # LISTA DE USUARIOS DE DRIVE
 from Drive_Calendar.Drive_EDD import Carpetas
+from Drive_Calendar.Drive_EDD import Archivos
+
 class Usuario:
     
     def __init__(self, nombre, password):
         self.nombre = nombre
         self.password = password
         self.dir = Carpetas.ArbolB()
+        self.archivos = Archivos.AVLTree()
 
     def __str__(self):
         pass
@@ -180,6 +183,21 @@ class ListaDoble:
                 print("err: "+str(err))
         return dir
     
+    def obtener_archivos(self, nombre):
+        aux = self.raiz
+        while aux is not None:
+            try:
+                if aux.usuario.nombre == nombre:
+                    archi = aux.usuario.archivos
+                    break
+                if aux.siguiente is not None:
+                    aux = aux.siguiente
+                else:
+                    break
+            except Exception as error:
+                print("Error: "+str(error))
+        return archi
+    
     def verLista(self, dir):
         lista = dir.listar_carpetas()
         print(lista)
@@ -203,3 +221,37 @@ class ListaDoble:
         else:
             print("retorno nodo")
             return nodo_retorna
+    
+    def buscar_avl(self, dir, listacarpetas):
+        return self.busca_avl_c(dir, listacarpetas)
+    
+    def busca_avl_c(self, dir, listacarpetas):
+        listado_obj = dir.listar_carpetas()
+        buscar = ""
+        nodo_retorna = None
+        if len(listacarpetas) > 0:
+            buscar = listacarpetas.pop(0)
+        for cada_carp in listado_obj:
+            if cada_carp.clave == buscar:
+                nodo_retorna = cada_carp
+                break
+        if len(listacarpetas)> 0:
+            print("recursividad")
+            return self.busca_avl_c(nodo_retorna, listacarpetas)
+        else:
+            return nodo_retorna
+    
+    def leer_archivo(self, path):
+        infile = open(path, 'rb')
+        lista = path.split("\\")
+        x = len(lista) - 1
+        nombre = lista[x]
+        lista2 = nombre.split(".")
+        extension = lista2[1]
+        buffer = infile.read()
+        size = len(buffer)/1000000
+        archivo = Archivos.Archivo(nombre, extension, infile)
+        archivo.size = size
+        return archivo
+        
+
