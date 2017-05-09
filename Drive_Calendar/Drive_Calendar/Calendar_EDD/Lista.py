@@ -1,9 +1,12 @@
 # LISTA DE USUARIOS DE CALENDAR
+from Drive_Calendar.Calendar_EDD import MatrizD
+
 class Usuario:
     
     def __init__(self, nombre, password):
         self.nombre = nombre
         self.password = password
+        self.matriz = MatrizD.Matriz()
 
     def __str__(self):
         pass
@@ -93,3 +96,33 @@ class ListaDoble:
             except Exception as inst:
                 print("Ocurrio un error al buscar... en Calendar log_in_check")
         return bandera
+    
+    def existe_usuario(self, nombre):
+        aux = self.raiz
+        bandera = "False"
+        while aux is not None:
+            try:
+                if aux.usuario.nombre == nombre:
+                    bandera = "True"
+                    break
+                if aux.siguiente is not None:
+                    aux = aux.siguiente
+                else:
+                    break
+            except Exception as err:
+                print("Error en el checkeo de Usuario: existe_usuario "+ str(err))
+        return bandera
+    
+    def buscar_matriz_usuario(self, nombre):
+        aux = self.raiz
+        retorno = None
+        while aux is not None:
+            if aux.usuario.nombre == nombre:
+                print("encontre al usuario")
+                retorno = aux.usuario.matriz
+                break
+            if aux.siguiente is not None:
+                aux = aux.siguiente
+            else:
+                break
+        return retorno

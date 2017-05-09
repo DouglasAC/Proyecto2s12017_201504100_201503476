@@ -29,6 +29,8 @@ urlpatterns = [
     #--------PETICION DE CADENAS DOT DE CALENDAR---------------------------------
     url(r'^ReporteUsuariosCalendar', cv_v.reporte_usuarios),
     url(r'^Historial_Calendar', cv_v.reporte_bitacora),
+    url(r'^Reporte_matriz', cv_v.reporte_matriz),
+    url(r'^tablahash', cv_v.reporte_hash),
     #--------RUTAS PARA DIRECCIONAMIENTO DE PAGINAS DRIVE---
     url(r'^$', dv_v.index, name='index'),
     url(r'^Drive/LogIn', dv_v.LogInView, name='Drive-logIn'),
@@ -51,13 +53,17 @@ urlpatterns = [
     #------RUTAS PARA DIRECCIONAMIENTO EN CALENDAR
     url(r'^Calendar/LogIn', cv_v.log_In_view, name='Calendar-logIn'),
     url(r'^Calendar/Registro', cv_v.reg_view, name='Calendar-registro' ),
+    url(r'^Calendar/Nuevo/Evento', cv_v.view_crear_eventos, name='cal-v-e'),
+    url(r'^Calendar/Android/NuevoE', cv_v.eventos_android),
     #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR
     url(r'^Calendar/Registrar', cv_v.registro_usuarios, name='calendar-reg'),
     url(r'^Calendar/Ingresar', cv_v.log_in_usuarios, name='calendar-ing'),
+    url(r'^Calendar/Creando/Evento', cv_v.ingresar_Evento, name='ing-mat'),
     #------RUTAS PARA METODOS DE ESTRUCTURAS EN CALENDAR DESDE ANDROID
     url(r'^Calendar/Android/Registrar', cv_v.registro_usuarios_android),
     url(r'^Calendar/Android/LogIn', cv_v.log_in_usuarios_Android),
     #PRUEBAS
     url(r'^file', dv_v.file_upload, name='filep'),
     url(r'^form_file', dv_v.file_view),
+    url(r'^Calendar/Android/serializar', cv_v.prueba),
 ]

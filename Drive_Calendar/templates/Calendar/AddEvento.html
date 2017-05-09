@@ -1,0 +1,79 @@
+{% extends "Calendar_Template.html" %}
+
+{% block UserName %}
+{{ request.session.usuario }}
+{% endblock %}
+
+{% block titulo %}
+Crear Eventos
+{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="col-md-3"></div>
+    <div class="col-md-5">
+        <div class="panel panel-default">
+            <div class="panel-heading">Crear Eventos nuevos</div>
+            <div class="panel-body">
+                <form action="{% url 'ing-mat' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="usuario" value="{{ request.session.usuario }}">
+                    <p>
+                        <h5>Crear nuevo Evento</h5>
+                    </p>
+                    <p>
+                        <select name="day" class="form-control">
+                            {% for d in dias %}
+                                <option value="{{ d }}">{{ d }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+                    <p>
+                        <select name="month" class="form-control">
+                            {% for m in meses %}
+                                <option value="{{ m }}">{{ m }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+                    <p>
+                        <select name="year" class="form-control">
+                            {% for y in years %}
+                                <option value="{{ y }}">{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+                    <p>
+                        <input type="text" placeholder="Nombre de Evento" name="nombre" class="form-control">
+                    </p>
+                    <p>
+                        <input type="text" placeholder="Descripcion de Evento" name="descrip" class="form-control">
+                    </p>
+                    <p>
+                        <input type="text" placeholder="Dirección del Evento" name="direc" class="form-control">
+                    </p>
+                    <p>
+                        <input type="text" placeholder="Hora de Evento" name="hora" class="form-control">
+                    </p>
+                    <p>
+                        <button type="submit" class="btn btn-success form-control"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Crear</button>
+                        <a href="#" type="button" class="btn btn-default form-control">My Calendar</a>
+                    </p>
+                </form>
+                {% if confirmacion == True %}
+                <script>
+                    alert('Evento creado Satisfatoriamente')
+                </script>
+                {% endif %}
+                {% if confirmacion == False %}
+                <script>
+                    alert('Ocurrió un error')
+                </script>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

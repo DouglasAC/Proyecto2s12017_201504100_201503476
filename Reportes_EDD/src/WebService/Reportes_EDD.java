@@ -98,4 +98,21 @@ public class Reportes_EDD {
             
         }
     }
+    
+    public void escribirHash(String cadena, String nombre){
+        File f;
+        FileWriter escribir;
+        try{
+            f = new File("C:\\Reportes_EDD_2\\"+nombre+".html");
+            escribir = new FileWriter(f);
+            BufferedWriter bw = new BufferedWriter(escribir);
+            PrintWriter salida = new PrintWriter(bw);
+            salida.write(cadena);
+            salida.close();
+            bw.close();
+        }
+        catch(Exception error){
+            System.out.println("Error en escribir el html");
+        }
+    }
 }
